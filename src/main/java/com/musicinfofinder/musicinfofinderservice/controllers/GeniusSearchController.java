@@ -21,13 +21,11 @@ public class GeniusSearchController {
 
     @GetMapping("/lyrics")
     public BaseGeniusResponse findLyrics(@Valid SearchLyricsRequest request) {
-        BaseGeniusResponse response = searchService.findLyrics(request);
-        return response;
+        return searchService.findLyrics(request);
     }
 
     @GetMapping("/lyrics/result")
     public Optional<Result> findResult(@Valid SearchLyricsRequest request) {
-        Optional<Result> result = searchService.findResult(request);
-        return result;
+        return searchService.findResult(request);
     }
 }

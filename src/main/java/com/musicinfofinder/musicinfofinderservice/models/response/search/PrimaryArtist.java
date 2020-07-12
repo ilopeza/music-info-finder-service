@@ -12,11 +12,11 @@ public class PrimaryArtist {
     @JsonProperty("header_image_url")
     private String headerImageUrl;
     @JsonProperty("image_url")
-    private String image_url;
+    private String imageUrl;
     @JsonProperty("is_meme_verified")
-    private boolean is_meme_verified;
+    private boolean memeVerified;
     @JsonProperty("is_verified")
-    private boolean is_verified;
+    private boolean verified;
     @JsonProperty("name")
     private String name;
     @JsonProperty("url")

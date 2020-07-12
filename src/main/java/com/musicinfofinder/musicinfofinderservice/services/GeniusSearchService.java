@@ -42,8 +42,7 @@ public class GeniusSearchService implements SearchService {
         if (isNull(geniusResponse)) {
             return empty();
         }
-        Optional<Result> resultInGeniusResponse = findResultInGeniusResponse(request, geniusResponse);
-        return resultInGeniusResponse;
+        return findResultInGeniusResponse(request, geniusResponse);
     }
 
     private BaseGeniusResponse searchInGenius(SearchLyricsRequest request) {
@@ -78,7 +77,7 @@ public class GeniusSearchService implements SearchService {
         if (CollectionUtils.isEmpty(hits)) {
             return empty();
         }
-        Optional<Result> optionalResult = hits.stream().filter(hit -> !isNull(hit.getResult()) && HitType.SONG.equals(hit.getType()))
+        return hits.stream().filter(hit -> !isNull(hit.getResult()) && HitType.SONG.equals(hit.getType()))
                 .map(Hit::getResult)
                 .filter(result -> equalsIgnoreCase(request.getTrackName(), result.getTitle()) ||
                         (isNotBlank(result.getFullTitle())
@@ -87,7 +86,6 @@ public class GeniusSearchService implements SearchService {
                         && isNotBlank(result.getPrimaryArtist().getName())
                         && equalsIgnoreCase(result.getPrimaryArtist().getName(), request.getArtistName()))
                 .findFirst();
-        return optionalResult;
     }
 
 }

@@ -17,11 +17,11 @@ public abstract class GeniusAbstractRequest<T> implements IGeniusRequest<T> {
         return executeRequest();
     }
 
-    public abstract static class GeniusAbstractRequestBuilder<SELF extends IRequestBuilder<SELF, T>, T>
-            implements IRequestBuilder<SELF, T> {
+    public abstract static class GeniusAbstractRequestBuilder<S extends IRequestBuilder<S, T>, T>
+            implements IRequestBuilder<S, T> {
         private WebClient.Builder webClientBuilder;
 
-        public SELF withWebClientBuilder(WebClient.Builder webClientBuilder) {
+        public S withWebClientBuilder(WebClient.Builder webClientBuilder) {
             this.webClientBuilder = webClientBuilder;
             return self();
         }
@@ -31,8 +31,8 @@ public abstract class GeniusAbstractRequest<T> implements IGeniusRequest<T> {
         }
 
         @Override
-        public SELF self() {
-            return (SELF) this;
+        public S self() {
+            return (S) this;
         }
     }
 }

@@ -20,14 +20,12 @@ public class MusicInfoFinderServiceApplication {
     public RestTemplate getRestTemplate() {
         HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
         factory.setConnectTimeout(3000);
-        RestTemplate restTemplate = new RestTemplate(factory);
-        return restTemplate;
+        return new RestTemplate(factory);
     }
 
     @Bean
     public WebClient.Builder getWebClientBuilder() {
         return WebClient.builder()
                 .baseUrl(BASE_URL);
-        //.defaultHeader(AUTH_HEADER_KEY, AUTH_HEADER_VALUE);
     }
 }

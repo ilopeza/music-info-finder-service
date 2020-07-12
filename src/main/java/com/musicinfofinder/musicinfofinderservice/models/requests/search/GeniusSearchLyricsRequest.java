@@ -9,6 +9,7 @@ import reactor.core.publisher.Mono;
 import javax.validation.constraints.NotBlank;
 import java.net.URI;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import static com.musicinfofinder.musicinfofinderservice.utils.Constants.ACCESS_TOKEN_KEY;
 import static com.musicinfofinder.musicinfofinderservice.utils.Constants.SEARCH_PATH;
@@ -29,17 +30,14 @@ public class GeniusSearchLyricsRequest extends GeniusAbstractRequest<BaseGeniusR
         Mono<BaseGeniusResponse> lyricsResponseMono = webClientBuilder
                 .build()
                 .get()
-                .uri(uriBuilder ->
-                        getUri(uriBuilder)
-                )
+                .uri(this::getUri)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML)
-                .acceptCharset(Charset.forName("UTF-8"))
+                .acceptCharset(StandardCharsets.UTF_8)
                 .retrieve()
                 .bodyToMono(BaseGeniusResponse.class);
 
-        BaseGeniusResponse response = lyricsResponseMono.block();
-        return response;
+        return lyricsResponseMono.block();
     }
 
     @Override
@@ -54,9 +52,6 @@ public class GeniusSearchLyricsRequest extends GeniusAbstractRequest<BaseGeniusR
     public static class GeniusSearchLyricsRequestBuilder extends GeniusAbstractRequestBuilder<GeniusSearchLyricsRequestBuilder, GeniusSearchLyricsRequest> {
         private SearchLyricsRequest searchLyricsRequest;
         private String accessToken;
-
-        public GeniusSearchLyricsRequestBuilder() {
-        }
 
         public GeniusSearchLyricsRequestBuilder withAccessToken(String accessToken) {
             this.accessToken = accessToken;

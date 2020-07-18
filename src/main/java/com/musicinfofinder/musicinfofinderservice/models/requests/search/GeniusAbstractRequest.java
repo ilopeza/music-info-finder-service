@@ -5,7 +5,12 @@ import org.springframework.web.util.UriBuilder;
 
 import java.net.URI;
 
-public abstract class GeniusAbstractRequest<T> implements IGeniusRequest<T> {
+/**
+ * Generic Genius request object.
+ *
+ * @param <T>
+ */
+public abstract class GeniusAbstractRequest<T> implements IRequest<T> {
     protected WebClient.Builder webClientBuilder;
 
     protected abstract T executeRequest();

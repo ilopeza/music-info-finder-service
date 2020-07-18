@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.NotBlank;
 
+/**
+ * Request received by the service to search for lyrics.
+ */
 public class SearchLyricsRequest {
 
     @NotBlank

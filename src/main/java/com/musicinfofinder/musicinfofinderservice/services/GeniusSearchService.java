@@ -9,6 +9,7 @@ import com.musicinfofinder.musicinfofinderservice.models.response.BaseGeniusResp
 import com.musicinfofinder.musicinfofinderservice.models.response.search.Hit;
 import com.musicinfofinder.musicinfofinderservice.models.response.search.HitType;
 import com.musicinfofinder.musicinfofinderservice.models.response.search.Result;
+import com.musicinfofinder.musicinfofinderservice.models.response.search.SearchLyricsResponse;
 import com.musicinfofinder.musicinfofinderservice.models.response.search.SearchResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -32,6 +33,9 @@ import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.apache.commons.lang.StringUtils.isEmpty;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
+/**
+ * Genius implementation to search lyrics.
+ */
 @Slf4j
 @Service
 public class GeniusSearchService implements SearchService {
@@ -42,12 +46,12 @@ public class GeniusSearchService implements SearchService {
     private String token;
 
     @Override
-    public BaseGeniusResponse findLyrics(SearchLyricsRequest request) {
+    public BaseGeniusResponse getExternalSearchRawResponse(SearchLyricsRequest request) {
         return searchInGenius(request);
     }
 
     @Override
-    public Optional<Result> findResult(SearchLyricsRequest request) {
+    public Optional<Result> filterResult(SearchLyricsRequest request) {
         BaseGeniusResponse geniusResponse = searchInGenius(request);
         if (isNull(geniusResponse)) {
             return empty();
@@ -56,13 +60,16 @@ public class GeniusSearchService implements SearchService {
     }
 
     @Override
-    public Optional<String> extractLyrics(SearchLyricsRequest request) {
-        Optional<Result> result = findResult(request);
+    public Optional<SearchLyricsResponse> extractLyrics(SearchLyricsRequest request) {
+        Optional<Result> result = filterResult(request);
         if (result.isEmpty()) {
             return empty();
         }
         String lyrics = extractLyrics(result.get());
-        return Optional.of(lyrics);
+        SearchLyricsResponse response = SearchLyricsResponse.builder()
+                .lyrics(lyrics)
+                .build();
+        return Optional.of(response);
     }
 
     private BaseGeniusResponse searchInGenius(SearchLyricsRequest request) {
@@ -112,7 +119,7 @@ public class GeniusSearchService implements SearchService {
 
     private String extractLyrics(Result result) {
         if (isNull(result)) {
-            throw new ValidationException("No lyrics can be extracted from empty Genius respose");
+            throw new ValidationException("No lyrics can be extracted from empty Genius response");
         }
         String geniusLyricsUrl = result.getUrl();
         if (isEmpty(geniusLyricsUrl)) {

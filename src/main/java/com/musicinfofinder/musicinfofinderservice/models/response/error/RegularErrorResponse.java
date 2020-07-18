@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus;
 
 /**
  * Object to display a custom response most common exceptions are thrown.
- * See https://developer.spotify.com/documentation/web-api/#regular-error-object
  */
 public class RegularErrorResponse {
     private HttpStatus status;

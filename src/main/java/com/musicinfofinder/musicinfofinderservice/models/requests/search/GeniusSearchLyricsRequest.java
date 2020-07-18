@@ -14,6 +14,12 @@ import static com.musicinfofinder.musicinfofinderservice.utils.Constants.ACCESS_
 import static com.musicinfofinder.musicinfofinderservice.utils.Constants.SEARCH_PATH;
 import static com.musicinfofinder.musicinfofinderservice.utils.Constants.SEARCH_QUERY_KEY;
 
+/**
+ * Search request object to get lyrics from external Genius service.
+ * See https://docs.genius.com/#search-h2
+ * The Genius search API looks like this: api.genius.com/search?q=Kendrick%20Lamar
+ * To  call the api, the acces token should always be present.
+ */
 public class GeniusSearchLyricsRequest extends GeniusAbstractRequest<BaseGeniusResponse> {
     @NotBlank
     private String query;
@@ -52,6 +58,16 @@ public class GeniusSearchLyricsRequest extends GeniusAbstractRequest<BaseGeniusR
         private SearchLyricsRequest searchLyricsRequest;
         private String accessToken;
 
+        @Override
+        public GeniusSearchLyricsRequest build() {
+            String query = buildQuery(searchLyricsRequest);
+            GeniusSearchLyricsRequest request = new GeniusSearchLyricsRequest();
+            request.query = query;
+            request.accessToken = accessToken;
+            request.webClientBuilder = getWebClient();
+            return request;
+        }
+
         public GeniusSearchLyricsRequestBuilder withAccessToken(String accessToken) {
             this.accessToken = accessToken;
             return this;
@@ -62,22 +78,18 @@ public class GeniusSearchLyricsRequest extends GeniusAbstractRequest<BaseGeniusR
             return this;
         }
 
+        /**
+         * Creates the search query with the correct format.
+         *
+         * @param searchLyricsRequest specifies the artist name, the track and the album. Currently, genius only uses track and artist.
+         * @return formatted query
+         */
         private String buildQuery(SearchLyricsRequest searchLyricsRequest) {
             return new StringBuilder()
                     .append(searchLyricsRequest.getArtistName().toLowerCase())
                     .append(" ")
                     .append(searchLyricsRequest.getTrackName().toLowerCase())
                     .toString();
-        }
-
-        @Override
-        public GeniusSearchLyricsRequest build() {
-            String query = buildQuery(searchLyricsRequest);
-            GeniusSearchLyricsRequest request = new GeniusSearchLyricsRequest();
-            request.query = query;
-            request.accessToken = accessToken;
-            request.webClientBuilder = getWebClient();
-            return request;
         }
     }
 }

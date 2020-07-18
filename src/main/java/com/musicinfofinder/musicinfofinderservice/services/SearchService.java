@@ -10,4 +10,6 @@ public interface SearchService {
     BaseGeniusResponse findLyrics(SearchLyricsRequest request);
 
     Optional<Result> findResult(SearchLyricsRequest request);
+
+    Optional<String> extractLyrics(SearchLyricsRequest request);
 }

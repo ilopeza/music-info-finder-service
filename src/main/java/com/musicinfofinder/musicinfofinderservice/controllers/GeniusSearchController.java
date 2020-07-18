@@ -28,4 +28,9 @@ public class GeniusSearchController {
     public Optional<Result> findResult(@Valid SearchLyricsRequest request) {
         return searchService.findResult(request);
     }
+
+    @GetMapping("/lyrics/extract")
+    public Optional<String> extractLyrics(@Valid SearchLyricsRequest request) {
+        return searchService.extractLyrics(request);
+    }
 }

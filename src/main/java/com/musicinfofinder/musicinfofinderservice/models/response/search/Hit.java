@@ -5,6 +5,10 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * Object to model Genius response to search API. Represents each one of the positive results. A search response
+ * can contain multiple hits.
+ */
 @Data
 public class Hit {
     @JsonProperty("highlights")

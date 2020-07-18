@@ -3,6 +3,9 @@ package com.musicinfofinder.musicinfofinderservice.models.response.search;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+/**
+ * Represents the artist in Genius search response.
+ */
 @Data
 public class PrimaryArtist {
     @JsonProperty("id")

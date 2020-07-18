@@ -8,8 +8,7 @@ import lombok.EqualsAndHashCode;
 import java.util.List;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class SearchResponse extends GeniusAbstractResponse {
+public class SearchResponse implements GeniusAbstractResponse {
     @JsonProperty("hits")
     List<Hit> hits;
 }

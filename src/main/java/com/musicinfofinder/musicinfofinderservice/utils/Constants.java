@@ -9,7 +9,4 @@ public class Constants {
     public static final String TOKEN_VALUE = "";
     public static final String ACCESS_TOKEN_KEY = "access_token";
     public static final String SEARCH_QUERY_KEY = "q";
-    private static final String AUTH_HEADER_KEY = "Authorization";
-    private static final String AUTH_HEADER_VALUE = BEARER_KEY + " " + TOKEN_VALUE;
-
 }

@@ -15,7 +15,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
 
 import java.util.LinkedHashMap;
 import java.util.Optional;
@@ -29,7 +28,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 public class CustomExceptionHandler {
 
     @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<Object> handleValidationException(ValidationException exception, WebRequest request) {
+    public ResponseEntity<RegularErrorResponse> handleValidationException(ValidationException exception) {
         val message = exception.getLocalizedMessage();
         final RegularErrorResponse regularErrorResponse = aRegularErrorResponse()
                 .withMessage(message)
@@ -38,7 +37,7 @@ public class CustomExceptionHandler {
     }
 
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<RegularErrorResponse> handleBadRequestException(BadRequestException exception, WebRequest request) {
+    public ResponseEntity<RegularErrorResponse> handleBadRequestException(BadRequestException exception) {
         val message = exception.getLocalizedMessage();
         final RegularErrorResponse regularErrorResponse = aRegularErrorResponse()
                 .withStatus(BAD_REQUEST)
@@ -49,7 +48,6 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(ClientException.class)
     public ResponseEntity<InfoFinderResponse> handleClientException(ClientException exception) {
-        val message = exception.getLocalizedMessage();
         final val infoFinderResponse = InfoFinderResponse.builder()
                 .status(1000)
                 .build();

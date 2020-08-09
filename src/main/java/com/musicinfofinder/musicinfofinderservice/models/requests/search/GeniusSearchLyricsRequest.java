@@ -1,6 +1,5 @@
 package com.musicinfofinder.musicinfofinderservice.models.requests.search;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.musicinfofinder.musicinfofinderservice.exceptions.BadRequestException;
 import com.musicinfofinder.musicinfofinderservice.exceptions.ClientException;
 import com.musicinfofinder.musicinfofinderservice.models.response.BaseGeniusResponse;
@@ -44,12 +43,8 @@ public class GeniusSearchLyricsRequest extends GeniusAbstractRequest<BaseGeniusR
                 .accept(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML)
                 .acceptCharset(StandardCharsets.UTF_8)
                 .retrieve()
-                .onStatus(HttpStatus::is4xxClientError, clientResponse -> {
-                    return Mono.error(new BadRequestException(String.valueOf(clientResponse.rawStatusCode())));
-                })
-                .onStatus(HttpStatus::is2xxSuccessful, clientResponse -> {
-                    return Mono.error(new ClientException(String.valueOf(clientResponse.rawStatusCode())));
-                })
+                .onStatus(HttpStatus::is4xxClientError, clientResponse -> Mono.error(new BadRequestException(String.valueOf(clientResponse.rawStatusCode()))))
+                .onStatus(HttpStatus::is2xxSuccessful, clientResponse -> Mono.error(new ClientException(String.valueOf(clientResponse.rawStatusCode()))))
                 .bodyToMono(BaseGeniusResponse.class);
 
         return lyricsResponseMono.block();

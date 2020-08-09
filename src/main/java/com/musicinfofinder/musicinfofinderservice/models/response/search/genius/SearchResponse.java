@@ -1,4 +1,4 @@
-package com.musicinfofinder.musicinfofinderservice.models.response.search;
+package com.musicinfofinder.musicinfofinderservice.models.response.search.genius;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.musicinfofinder.musicinfofinderservice.models.response.GeniusAbstractResponse;

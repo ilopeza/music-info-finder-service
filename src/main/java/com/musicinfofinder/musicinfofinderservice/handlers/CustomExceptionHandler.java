@@ -1,6 +1,9 @@
 package com.musicinfofinder.musicinfofinderservice.handlers;
 
+import com.musicinfofinder.musicinfofinderservice.exceptions.BadRequestException;
+import com.musicinfofinder.musicinfofinderservice.exceptions.ClientException;
 import com.musicinfofinder.musicinfofinderservice.exceptions.ValidationException;
+import com.musicinfofinder.musicinfofinderservice.models.response.InfoFinderResponse;
 import com.musicinfofinder.musicinfofinderservice.models.response.error.RegularErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -12,7 +15,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
 
 import java.util.LinkedHashMap;
 import java.util.Optional;
@@ -25,21 +27,31 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 @Slf4j
 public class CustomExceptionHandler {
 
-    /**
-     * Handles the response to the exceptions thrown when calling a REST API thru RestTemplate. The message and the status
-     * are retrieved from the response.
-     *
-     * @param exception
-     * @param request
-     * @return RegularErrorResponse with information about the failed call.
-     */
     @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<Object> handleValidationException(ValidationException exception, WebRequest request) {
+    public ResponseEntity<RegularErrorResponse> handleValidationException(ValidationException exception) {
         val message = exception.getLocalizedMessage();
         final RegularErrorResponse regularErrorResponse = aRegularErrorResponse()
                 .withMessage(message)
                 .build();
         return new ResponseEntity(regularErrorResponse, BAD_REQUEST);
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<RegularErrorResponse> handleBadRequestException(BadRequestException exception) {
+        val message = exception.getLocalizedMessage();
+        final RegularErrorResponse regularErrorResponse = aRegularErrorResponse()
+                .withStatus(BAD_REQUEST)
+                .withMessage(message)
+                .build();
+        return new ResponseEntity(regularErrorResponse, BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ClientException.class)
+    public ResponseEntity<InfoFinderResponse> handleClientException(ClientException exception) {
+        final val infoFinderResponse = InfoFinderResponse.builder()
+                .status(1000)
+                .build();
+        return ResponseEntity.ok(infoFinderResponse);
     }
 
     /**

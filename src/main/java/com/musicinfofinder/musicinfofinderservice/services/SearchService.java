@@ -2,8 +2,7 @@ package com.musicinfofinder.musicinfofinderservice.services;
 
 import com.musicinfofinder.musicinfofinderservice.models.requests.search.SearchLyricsRequest;
 import com.musicinfofinder.musicinfofinderservice.models.response.BaseGeniusResponse;
-import com.musicinfofinder.musicinfofinderservice.models.response.search.Result;
-import com.musicinfofinder.musicinfofinderservice.models.response.search.SearchLyricsResponse;
+import com.musicinfofinder.musicinfofinderservice.models.response.search.genius.GeniusResult;
 
 import java.util.Optional;
 
@@ -26,7 +25,7 @@ public interface SearchService {
      * @return the result for the search request, if exists.
      * @throws com.musicinfofinder.musicinfofinderservice.exceptions.NoLyricsFoundException if no lyrics are found.
      */
-    Optional<Result> filterResult(SearchLyricsRequest request);
+    Optional<GeniusResult> filterResult(SearchLyricsRequest request);
 
     /**
      * Gets tht response from external service and transforms it into SearchLyricsResponse
@@ -36,5 +35,5 @@ public interface SearchService {
      * @throws com.musicinfofinder.musicinfofinderservice.exceptions.ValidationException    if request is not valid
      * @throws com.musicinfofinder.musicinfofinderservice.exceptions.NoLyricsFoundException if no lyrics are found.
      */
-    Optional<SearchLyricsResponse> extractLyrics(SearchLyricsRequest request);
+    Optional<String> getLyrics(SearchLyricsRequest request);
 }

@@ -1,7 +1,7 @@
 package com.musicinfofinder.musicinfofinderservice.models.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.musicinfofinder.musicinfofinderservice.models.response.search.SearchResponse;
+import com.musicinfofinder.musicinfofinderservice.models.response.search.genius.SearchResponse;
 import lombok.Data;
 
 /**

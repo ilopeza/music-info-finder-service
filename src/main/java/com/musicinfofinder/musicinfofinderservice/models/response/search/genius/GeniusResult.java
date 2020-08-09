@@ -1,4 +1,4 @@
-package com.musicinfofinder.musicinfofinderservice.models.response.search;
+package com.musicinfofinder.musicinfofinderservice.models.response.search.genius;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.Data;
  * Object to model the result of the search. Keeps all the important information about the lyrics, artist, album.
  */
 @Data
-public class Result {
+public class GeniusResult implements IResult {
     @JsonProperty("annotation_count")
     private int annotationCount;
     @JsonProperty("api_path")

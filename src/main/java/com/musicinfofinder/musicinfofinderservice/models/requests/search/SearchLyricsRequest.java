@@ -1,12 +1,14 @@
 package com.musicinfofinder.musicinfofinderservice.models.requests.search;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 
 /**
  * Request received by the service to search for lyrics.
  */
+@Data
 public class SearchLyricsRequest {
 
     @NotBlank
@@ -20,28 +22,4 @@ public class SearchLyricsRequest {
     @NotBlank
     @JsonProperty("album_name")
     private String albumName;
-
-    public String getArtistName() {
-        return artistName;
-    }
-
-    public void setArtistName(String artistName) {
-        this.artistName = artistName;
-    }
-
-    public String getTrackName() {
-        return trackName;
-    }
-
-    public void setTrackName(String trackName) {
-        this.trackName = trackName;
-    }
-
-    public String getAlbumName() {
-        return albumName;
-    }
-
-    public void setAlbumName(String albumName) {
-        this.albumName = albumName;
-    }
 }

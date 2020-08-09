@@ -42,8 +42,10 @@ public class GeniusSearchService implements SearchService {
 
     @Autowired
     private WebClient.Builder webClientBuilder;
-    @Value("${genius.acccess.token}")
+    @Value("${genius.access.token:Config server issue}")
     private String token;
+    @Value("${role.name:Config server issue}")
+    private String role;
 
     @Override
     public BaseGeniusResponse getExternalSearchRawResponse(SearchLyricsRequest request) {

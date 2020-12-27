@@ -13,13 +13,13 @@ public class SearchLyricsRequest {
 
     @NotBlank
     @JsonProperty("artist_name")
-    private String artistName;
+    private String artist_name;
 
     @NotBlank
     @JsonProperty("track_name")
-    private String trackName;
+    private String track_name;
 
     @NotBlank
     @JsonProperty("album_name")
-    private String albumName;
+    private String album_name;
 }

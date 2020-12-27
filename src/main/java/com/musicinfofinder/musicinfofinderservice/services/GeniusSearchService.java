@@ -70,9 +70,9 @@ public class GeniusSearchService implements SearchService {
     }
 
     private BaseGeniusResponse searchInGenius(SearchLyricsRequest request) {
-        if (isBlank(request.getAlbumName())
-                && isBlank(request.getArtistName())
-                && isBlank(request.getTrackName())) {
+        if (isBlank(request.getAlbum_name())
+                && isBlank(request.getArtist_name())
+                && isBlank(request.getTrack_name())) {
             log.error("Artist name and track name can not be blank {}", request);
             throw new BadRequestException("Artist name and track name can not be blank");
         }
@@ -86,9 +86,9 @@ public class GeniusSearchService implements SearchService {
     }
 
     private Optional<GeniusResult> findResultInGeniusResponse(SearchLyricsRequest request, BaseGeniusResponse response) {
-        if (isBlank(request.getArtistName())
-                || isBlank(request.getTrackName())
-                || isBlank(request.getAlbumName())) {
+        if (isBlank(request.getArtist_name())
+                || isBlank(request.getTrack_name())
+                || isBlank(request.getAlbum_name())) {
             log.error("Filters can not be empty {}", request);
             throw new BadRequestException("Filters can not be empty");
         }
@@ -108,12 +108,12 @@ public class GeniusSearchService implements SearchService {
                 .filter(hit -> !isNull(hit.getGeniusResult())
                         && HitType.SONG.equals(hit.getType()))
                 .map(Hit::getGeniusResult)
-                .filter(geniusResult -> equalsIgnoreCase(request.getTrackName(), geniusResult.getTitle()) ||
+                .filter(geniusResult -> equalsIgnoreCase(request.getTrack_name(), geniusResult.getTitle()) ||
                         (isNotBlank(geniusResult.getFullTitle())
-                                && geniusResult.getFullTitle().contains(request.getTrackName())))
+                                && geniusResult.getFullTitle().contains(request.getTrack_name())))
                 .filter(geniusResult -> !isNull(geniusResult.getPrimaryArtist())
                         && isNotBlank(geniusResult.getPrimaryArtist().getName())
-                        && equalsIgnoreCase(geniusResult.getPrimaryArtist().getName(), request.getArtistName()))
+                        && equalsIgnoreCase(geniusResult.getPrimaryArtist().getName(), request.getArtist_name()))
                 .findFirst();
     }
 }

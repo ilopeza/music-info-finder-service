@@ -1,7 +1,7 @@
 package com.musicinfofinder.musicinfofinderservice.handlers;
 
 import com.musicinfofinder.musicinfofinderservice.exceptions.BadRequestException;
-import com.musicinfofinder.musicinfofinderservice.exceptions.ClientException;
+import com.musicinfofinder.musicinfofinderservice.exceptions.ExtractionLyricsException;
 import com.musicinfofinder.musicinfofinderservice.exceptions.ValidationException;
 import com.musicinfofinder.musicinfofinderservice.models.response.InfoFinderResponse;
 import com.musicinfofinder.musicinfofinderservice.models.response.error.RegularErrorResponse;
@@ -29,27 +29,32 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<RegularErrorResponse> handleValidationException(ValidationException exception) {
+        log.error("Handling ValidationException: {}", exception.getMessage());
         val message = exception.getLocalizedMessage();
         final RegularErrorResponse regularErrorResponse = aRegularErrorResponse()
                 .withMessage(message)
                 .build();
-        return new ResponseEntity(regularErrorResponse, BAD_REQUEST);
+        return new ResponseEntity<>(regularErrorResponse, BAD_REQUEST);
     }
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<RegularErrorResponse> handleBadRequestException(BadRequestException exception) {
         val message = exception.getLocalizedMessage();
+        log.error("Handling BadRequestException: {}", message);
         final RegularErrorResponse regularErrorResponse = aRegularErrorResponse()
                 .withStatus(BAD_REQUEST)
                 .withMessage(message)
                 .build();
-        return new ResponseEntity(regularErrorResponse, BAD_REQUEST);
+        return new ResponseEntity<>(regularErrorResponse, BAD_REQUEST);
     }
 
-    @ExceptionHandler(ClientException.class)
-    public ResponseEntity<InfoFinderResponse> handleClientException(ClientException exception) {
-        final val infoFinderResponse = InfoFinderResponse.builder()
-                .status(1000)
+    @ExceptionHandler(ExtractionLyricsException.class)
+    public ResponseEntity<InfoFinderResponse> handleExtractionLyricsException(ExtractionLyricsException exception) {
+        val message = exception.getLocalizedMessage();
+        log.error("Handling ExtractionLyricsException: {}", message);
+        val infoFinderResponse = InfoFinderResponse.builder()
+                .status(3000)
+                .lyrics("No lyrics found")
                 .build();
         return ResponseEntity.ok(infoFinderResponse);
     }

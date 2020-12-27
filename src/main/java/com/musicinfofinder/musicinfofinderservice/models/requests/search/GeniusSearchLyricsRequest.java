@@ -3,6 +3,8 @@ package com.musicinfofinder.musicinfofinderservice.models.requests.search;
 import com.musicinfofinder.musicinfofinderservice.exceptions.BadRequestException;
 import com.musicinfofinder.musicinfofinderservice.exceptions.ClientException;
 import com.musicinfofinder.musicinfofinderservice.models.response.BaseGeniusResponse;
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,6 +25,7 @@ import static com.musicinfofinder.musicinfofinderservice.utils.Constants.SEARCH_
  * The Genius search API looks like this: api.genius.com/search?q=Kendrick%20Lamar
  * To  call the api, the acces token should always be present.
  */
+@Slf4j
 public class GeniusSearchLyricsRequest extends GeniusAbstractRequest<BaseGeniusResponse> {
     @NotBlank
     private String query;
@@ -35,7 +38,7 @@ public class GeniusSearchLyricsRequest extends GeniusAbstractRequest<BaseGeniusR
 
     @Override
     protected BaseGeniusResponse executeRequest() {
-        Mono<BaseGeniusResponse> lyricsResponseMono = webClientBuilder
+       return webClientBuilder
                 .build()
                 .get()
                 .uri(this::getUri)
@@ -44,19 +47,20 @@ public class GeniusSearchLyricsRequest extends GeniusAbstractRequest<BaseGeniusR
                 .acceptCharset(StandardCharsets.UTF_8)
                 .retrieve()
                 .onStatus(HttpStatus::is4xxClientError, clientResponse -> Mono.error(new BadRequestException(String.valueOf(clientResponse.rawStatusCode()))))
-                .onStatus(HttpStatus::is2xxSuccessful, clientResponse -> Mono.error(new ClientException(String.valueOf(clientResponse.rawStatusCode()))))
-                .bodyToMono(BaseGeniusResponse.class);
-
-        return lyricsResponseMono.block();
+                .onStatus(HttpStatus::is5xxServerError, clientResponse -> Mono.error(new ClientException(String.valueOf(clientResponse.rawStatusCode()))))
+                .bodyToMono(BaseGeniusResponse.class)
+                .block();
     }
 
     @Override
     protected URI getUri(UriBuilder uriBuilder) {
-        return uriBuilder
+        val uri = uriBuilder
                 .path(SEARCH_PATH)
                 .queryParam(SEARCH_QUERY_KEY, query)
                 .queryParam(ACCESS_TOKEN_KEY, accessToken)
                 .build();
+        log.info("Calling endpoint: {}", uri);
+        return uri;
     }
 
     public static class GeniusSearchLyricsRequestBuilder extends GeniusAbstractRequestBuilder<GeniusSearchLyricsRequestBuilder, GeniusSearchLyricsRequest> {
@@ -91,9 +95,9 @@ public class GeniusSearchLyricsRequest extends GeniusAbstractRequest<BaseGeniusR
          */
         private String buildQuery(SearchLyricsRequest searchLyricsRequest) {
             return new StringBuilder()
-                    .append(searchLyricsRequest.getArtistName().toLowerCase())
+                    .append(searchLyricsRequest.getArtist_name().toLowerCase())
                     .append(" ")
-                    .append(searchLyricsRequest.getTrackName().toLowerCase())
+                    .append(searchLyricsRequest.getTrack_name().toLowerCase())
                     .toString();
         }
     }
